@@ -42,3 +42,9 @@ camerasr:
     valid_lr: '/media/4T/Dizzy/CameraSR/City100/City100_iPhoneX/LR_val'
     valid_hr: '/media/4T/Dizzy/CameraSR/City100/City100_iPhoneX/HR_val'
 
+hcp:
+  tdsr:
+    source: '/data/yuzun/MRI_data/reged_ADNI/ADNI_unreged_T1img_x/A/train'
+    target: '/data/yuzun/MRI_data/hcp_all/A/train'
+    valid_hr: '/data/yuzun/MRI_data/reged_ADNI/ADNI_unreged_T1img_x/A/train'
+    valid_lr:  '/data/yuzun/MRI_data/hcp_all/A/train'

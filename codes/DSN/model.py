@@ -26,7 +26,7 @@ class De_resnet(nn.Module):
     def __init__(self, n_res_blocks=8, scale=4):
         super(De_resnet, self).__init__()
         self.block_input = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+            nn.Conv2d(1, 64, kernel_size=3, padding=1),  # 将通道数由3改为1
             nn.PReLU()
         )
         self.res_blocks = nn.ModuleList([ResidualBlock(64) for _ in range(n_res_blocks)])
@@ -43,7 +43,7 @@ class De_resnet(nn.Module):
                 nn.Conv2d(64, 64, kernel_size=3, stride=2, padding=1),
                 nn.PReLU(),
             )
-        self.block_output = nn.Conv2d(64, 3, kernel_size=3, padding=1)
+        self.block_output = nn.Conv2d(64, 1, kernel_size=3, padding=1)
 
     def forward(self, x):
         block = self.block_input(x)
@@ -76,7 +76,8 @@ class Discriminator(nn.Module):
                 self.DWT2 = DWTForward(J=1, wave='haar', mode='reflect')
                 self.filter = self.filter_wavelet
                 self.cs = cs
-                n_input_channel = 9 if self.cs == 'cat' else 3
+                # n_input_channel = 9 if self.cs == 'cat' else 3
+                n_input_channel = 3 if self.cs == 'cat' else 1
             else:
                 raise NotImplementedError('Frequency Separation type [{:s}] not recognized'.format(filter_type))
             print('# FS type: {}, kernel size={}'.format(filter_type.lower(), kernel_size))
@@ -171,7 +172,7 @@ class NLayerDiscriminator(nn.Module):
 
 
 class DiscriminatorBasic(nn.Module):
-    def __init__(self, n_input_channels=3, norm_layer='Batch'):
+    def __init__(self, n_input_channels=3, norm_layer='Batch'):  # 由3改为1
         super(DiscriminatorBasic, self).__init__()
         if norm_layer == 'Batch':
             self.net = nn.Sequential(

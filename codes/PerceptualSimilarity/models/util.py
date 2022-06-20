@@ -1,12 +1,13 @@
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-from skimage.measure import compare_ssim
 import torch
 from torch.autograd import Variable
+
+import numpy as np
+from skimage.measure import compare_ssim
+
 
 from . import dist_model
 

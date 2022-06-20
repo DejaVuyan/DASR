@@ -14,6 +14,7 @@ import json
 from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
+# torch.backends.cudnn.enabled = False
 
 def saveimgs(img_list, img_name, savepath):
     img = img_list[0][0].cpu().numpy().transpose((1,2,0))
@@ -112,6 +113,15 @@ elif opt.dataset == 'camerasr':
     train_loader = DataLoader(dataset=train_set, num_workers=opt.num_workers, batch_size=opt.batch_size, shuffle=True)
     val_set = loader.Val_Deresnet_Dataset(PATHS['camerasr'][opt.artifacts]['valid_hr'],
                                 lr_dir=PATHS['camerasr'][opt.artifacts]['valid_lr'], **vars(opt))
+    val_loader = DataLoader(dataset=val_set, num_workers=1, batch_size=1, shuffle=False)
+
+# 仿照aim2019的格式写hcp的数据集
+if opt.dataset == 'hcp':
+    train_set = loader.Train_Deresnet_Dataset(PATHS['hcp'][opt.artifacts]['source'], PATHS['hcp'][opt.artifacts]['target'],
+                                    cropped=True, **vars(opt))
+    train_loader = DataLoader(dataset=train_set, num_workers=opt.num_workers, batch_size=opt.batch_size, shuffle=True)
+    val_set = loader.Val_Deresnet_Dataset(PATHS['hcp'][opt.artifacts]['valid_hr'],  # paths.yml中的路径
+                                lr_dir=PATHS['hcp'][opt.artifacts]['valid_lr'], **vars(opt))
     val_loader = DataLoader(dataset=val_set, num_workers=1, batch_size=1, shuffle=False)
 else:
     train_set = loader.TrainDataset(PATHS[opt.dataset][opt.artifacts]['hr']['train'], cropped=True, **vars(opt))
